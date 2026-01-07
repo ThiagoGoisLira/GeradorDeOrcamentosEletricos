@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Orçamento</title>
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilo básico para os textareas */
+        #observacoes,
+        .servico-detalhe textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+            font-family: sans-serif;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        /* Estilo para a célula editável na tabela */
+        .valor-item[contenteditable="true"] {
+            border: 1px dashed #005a9c;
+            padding: 2px 4px;
+            cursor: text;
+            display: block;
+            min-width: 50px;
+        }
+
+        /* Espaçamento para o novo grupo de serviços */
+        .servico-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Container principal do formulário -->
+    <div class="container" id="quote-form">
+        <h1>Gerador de Orçamento</h1>
+
+        <!-- Seção de dados do cliente -->
+        <h2>Dados do Cliente</h2>
+        <div class="form-group">
+            <label for="cliente_nome">Cliente:</label>
+            <input type="text" id="cliente_nome" placeholder="Nome completo do cliente">
+        </div>
+        <div class="form-group">
+            <label for="cliente_endereco">Endereço:</label>
+            <input type="text" id="cliente_endereco" placeholder="Rua, N°, Bairro, Cidade">
+        </div>
+        <div class="form-group">
+            <label for="cliente_telefone">Telefone/Contato:</label>
+            <input type="tel" id="cliente_telefone" placeholder="(XX) XXXXX-XXXX">
+        </div>
+        <div class="form-group">
+            <label for="orcamento_data">Data do Orçamento:</label>
+            <input type="date" id="orcamento_data">
+        </div>
+
+        <!-- Seção de serviços principais -->
+        <h2>Serviços Principais</h2>
+        <div class="form-group">
+            
+            <div class="servico-group">
+                <div class="servico-item servico-principal">
+                    <input type="checkbox" id="serv_cameras">
+                    <label for="serv_cameras">Câmeras (Instalações/Manutenção)</label>
+                    <input type="number" id="val_cameras" class="valor-servico valor-principal" placeholder="R$">
+                </div>
+                <div class="servico-detalhe" id="detalhe_cameras" style="display: none;">
+                    <label for="desc_cameras">Detalhes do Serviço de Câmeras:</label>
+                    <textarea id="desc_cameras" rows="2" placeholder="Ex: Instalação de 4 câmeras HD, configuração de DVR e treinamento do usuário."></textarea>
+                </div>
+            </div>
+            
+            <div class="servico-group">
+                <div class="servico-item servico-principal">
+                    <input type="checkbox" id="serv_cerca">
+                    <label for="serv_cerca">Cerca Elétrica</label>
+                    <input type="number" id="val_cerca" class="valor-servico valor-principal" placeholder="R$">
+                </div>
+                <div class="servico-detalhe" id="detalhe_cerca" style="display: none;">
+                    <label for="desc_cerca">Detalhes do Serviço de Cerca Elétrica:</label>
+                    <textarea id="desc_cerca" rows="2" placeholder="Ex: Instalação de 40m de cerca, 6 isoladores e placa de advertência."></textarea>
+                </div>
+            </div>
+
+            <div class="servico-group">
+                <div class="servico-item servico-principal">
+                    <input type="checkbox" id="serv_instalacao">
+                    <label for="serv_instalacao">Instalação Elétrica (Nova/Reforma)</label>
+                    <input type="number" id="val_instalacao" class="valor-servico valor-principal" placeholder="R$">
+                </div>
+                <div class="servico-detalhe" id="detalhe_instalacao" style="display: none;">
+                    <label for="desc_instalacao">Detalhes da Instalação/Reforma Elétrica:</label>
+                    <textarea id="desc_instalacao" rows="2" placeholder="Ex: Troca da fiação de 3 cômodos e instalação de novo quadro de disjuntores."></textarea>
+                </div>
+            </div>
+
+            <div class="servico-group">
+                <div class="servico-item servico-principal">
+                    <input type="checkbox" id="serv_manutencao">
+                    <label for="serv_manutencao">Manutenção Elétrica Geral</label>
+                    <input type="number" id="val_manutencao" class="valor-servico valor-principal" placeholder="R$">
+                </div>
+                <div class="servico-detalhe" id="detalhe_manutencao" style="display: none;">
+                    <label for="desc_manutencao">Detalhes da Manutenção Geral:</label>
+                    <textarea id="desc_manutencao" rows="2" placeholder="Ex: Reparo de curto-circuito em tomada e balanceamento de carga no quadro."></textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Seção para adicionar itens e materiais -->
+        <h2>Itens Adicionais (Peças, Materiais, etc.)</h2>
+        <div class="item-adder">
+            <input type="text" id="item_desc" placeholder="Descrição do item (ex: Disjuntor 20A)">
+            <input type="number" id="item_valor" placeholder="Valor (R$)">
+            <button type="button">Adicionar</button>
+        </div>
+        
+        <!-- Tabela para listar os itens adicionais -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Valor (R$)</th>
+                    <th style="width: 80px;">Ação</th> </tr>
+            </thead>
+            <tbody id="itens_lista">
+                <!-- Itens adicionados dinamicamente aqui -->
+            </tbody>
+        </table>
+
+        <!-- Seção de custos adicionais -->
+        <h2>Custos Adicionais</h2>
+        <div class="form-group">
+            <label for="outros_valores">Outros custos (ex: Deslocamento, Taxas):</label>
+            <input type="number" id="outros_valores" placeholder="0.00">
+        </div>
+
+        <!-- Exibição do valor total -->
+        <div class="total-display">
+            <h2>Total: <span id="total_orcamento">R$ 0,00</span></h2>
+        </div>
+
+        <!-- Campo de observações adicionais -->
+        <div class="form-group" style="margin-top: 20px;">
+            <label for="observacoes" style="display: block;">Observações Adicionais:</label>
+            <textarea id="observacoes" rows="4" placeholder="Detalhes do serviço, condições de pagamento, prazos, etc..."></textarea>
+        </div>
+
+        <!-- Botão para gerar a versão de impressão -->
+        <button type="button" class="btn-print">Gerar Orçamento para Impressão</button>
+    </div>
+
+    <!-- Inclusão do arquivo JavaScript -->
+    <script src="script.js"></script>
+    <script>
+        // Preenche o campo de data com a data atual ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('orcamento_data').value = new Date().toISOString().split('T')[0];
+        });
+    </script>
+
+</body>
+
+</html>
