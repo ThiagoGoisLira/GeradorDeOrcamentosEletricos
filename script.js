@@ -483,8 +483,8 @@ function generatePrintableQuote() {
                         Orçamento válido por 15 dias, sujeito à aprovação final do escopo.
                     </div>
                     <div class="contact-info">
-                        <p>-- G Eletrica - 41.065.559/0001-87 --</p>
-                        <p>(87) 9.8802-7252 // Att. Thiago Gois</p>
+                        <p>-- postGit --</p>
+                        <p>(87) postGit // Att. postGit</p>
                     </div>
                 </footer>
             </div>
